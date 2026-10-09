@@ -1,0 +1,41 @@
+[project]
+name = "football-ai-backend"
+version = "0.1.0"
+description = "Football AI Analysis and Prediction Platform - Backend"
+requires-python = ">=3.11"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [".venv", "models", "scripts/data", "alembic/versions"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+# E501: line length handled by formatter/readability judgement, not a hard error.
+# B008: FastAPI's `Depends(...)` in argument defaults is the framework's
+#       idiomatic, documented pattern — not the mutable-default-argument
+#       footgun this rule targets.
+ignore = ["E501", "B008"]
+
+[tool.ruff.lint.per-file-ignores]
+# These two files define abstract/concrete methods literally named `list`,
+# which shadows the builtin `list` for type annotations elsewhere in the
+# same class body (a real mypy footgun) — so they use `typing.List`
+# instead of the modern lowercase alias `ruff --fix` would otherwise apply.
+"app/repositories/interfaces/repositories.py" = ["UP006", "UP035"]
+"app/repositories/implementations/in_memory.py" = ["UP006", "UP035"]
+"app/repositories/implementations/postgres.py" = ["UP006", "UP035"]
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+disallow_untyped_defs = false
+warn_unused_ignores = true
+warn_return_any = false
+exclude = ["tests/", "scripts/", "alembic/versions/"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+filterwarnings = ["ignore::DeprecationWarning"]
