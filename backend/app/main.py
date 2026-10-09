@@ -1,12 +1,10 @@
-﻿
-from fastapi import FastAPI
+﻿from fastapi import FastAPI
 
 app = FastAPI(
     title="Football AI Analysis and Prediction Platform",
     version="0.1.0",
     description="Football match analysis and prediction API",
 )
-
 
 @app.get("/")
 def health_check():
@@ -16,21 +14,6 @@ def health_check():
         "version": "0.1.0",
     }
 
-
 @app.get("/health")
 def health():
     return {"status": "healthy"}
-
-
-@app.get("/api/v1/matches")
-def get_matches():
-    return {
-        "source": "sample",
-        "matches": [
-            {
-                "home_team": "Arsenal",
-                "away_team": "Chelsea",
-                "status": "sample",
-            }
-        ],
-    }
